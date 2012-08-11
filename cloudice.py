@@ -37,11 +37,12 @@ if __name__ == "__main__":
         playcount = playcount + 1
 
         for track in tracks:
-            print "Now playing: ", track.user["username"], " - ", track.title
             stream = urllib2.urlopen("%s?client_id=%s" % (track.stream_url, settings.client_id))
             streaming = True
             try:
+                username = unicode(track.user["username"].strip(codecs.BOM_UTF8), 'utf-8')
                 title = unicode(track.title.strip(codecs.BOM_UTF8), 'utf-8')
+                print "Now playing: ", username, " - ", title
                 icecast.update_metadata(title)
             except:
                 pass
