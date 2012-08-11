@@ -1,0 +1,13 @@
+port=8000
+host=""
+password=""
+mount_point=""
+name=""
+genre=""
+bitrate=128
+description=""
+url=""
+samplerate=44100
+channels=2
+user_agent="CloudIce"
+buffer_packets=4096
