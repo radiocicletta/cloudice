@@ -46,9 +46,9 @@ def connect():
     
     response = s.recv(4096)
     if len(response) == 0:
-        raise "No response from icecast server"
+        raise Exception("No response from icecast server")
     if response.find(r"HTTP/1.0 200 OK") == -1:
-        raise "Server response: %s" % response
+        raise Exception("Server response: %s" % response)
     start_time = time.time()
     packets_sent = 0
     
