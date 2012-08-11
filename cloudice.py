@@ -24,8 +24,17 @@ if __name__ == "__main__":
     limit = 100
     offset = 0
 
-    while True:
-        tracks = client.get("/tracks", license="cc-by", tags=settings.tags, order=settings.order, types="original", limit=limit, offset=offset)
+    errorcount = 0.0
+    playcount = 10.0
+
+    while errorcount / playcount <= 1:
+        try:
+            tracks = client.get("/tracks", license="cc-by", tags=settings.tags, order=settings.order, types="original", limit=limit, offset=offset)
+        except:
+            errorcount = errorcount + 1
+            continue
+
+        playcount = playcount + 1
 
         for track in tracks:
             print "Now playing: ", track.user["username"], " - ", track.title
