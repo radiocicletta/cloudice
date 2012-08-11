@@ -31,7 +31,11 @@ if __name__ == "__main__":
             print "Now playing: ", track.user["username"], " - ", track.title
             stream = urllib2.urlopen("%s?client_id=%s" % (track.stream_url, client_id))
             streaming = True
-            icecast.update_metadata(track.title)
+            try:
+                title = ascii(track.title)
+                icecast.update_metadata(title)
+            except:
+                pass
             while streaming:
                 io = StringIO()
                 io.write(stream.read(4096))
