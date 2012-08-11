@@ -88,7 +88,7 @@ def send(buf):
         return
     # sleep for however much time is remaining to meet our bitrate
     total_packet_time = extra_packets * (4096.0 * 8) / (stream_settings.bitrate * 1000.0)
-    time.sleep(total_packet_time - packet_elapsed_time)
+    time.sleep((total_packet_time - packet_elapsed_time) % 1)
 
 def close():
     s.shutdown(1)
