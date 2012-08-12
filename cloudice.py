@@ -37,8 +37,14 @@ if __name__ == "__main__":
         playcount = playcount + 1
 
         for track in tracks:
-            stream = urllib2.urlopen("%s?client_id=%s" % (track.stream_url, settings.client_id))
-            streaming = True
+            try:
+                stream = urllib2.urlopen("%s?client_id=%s" % (track.stream_url, settings.client_id))
+                streaming = True
+            except:
+                errorcount = errorcount + 1
+                if errorcount / playcount >= 1:
+                    sys.exit(1)
+            
             try:
                 username = unicode(track.user["username"].strip(codecs.BOM_UTF8), 'utf-8')
                 title = unicode(track.title.strip(codecs.BOM_UTF8), 'utf-8')
