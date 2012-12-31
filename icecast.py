@@ -23,7 +23,6 @@ def request_format(request, line_separator="\n"):
 def connect():
     global s, packets_sent, start_time
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(10)
     s.connect((stream_settings.host, stream_settings.port))
     s.sendall("SOURCE %s ICE/1.0\n%s\n%s\n\n" % (
         stream_settings.mount_point, 
@@ -57,6 +56,7 @@ def connect():
 # update the metadata using a new socket -- i guess there's no other useful keys besides "song"
 def update_metadata(song):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(10)
     s.connect((stream_settings.host, stream_settings.port))
     s.sendall("GET /admin/metadata?%s HTTP/1.0\r\n%s\r\n\r\n" % (
         urlencode({
