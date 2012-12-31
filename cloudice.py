@@ -62,7 +62,7 @@ def MixCloudGen():
         if i == 0:
             j = j + 1
         i = (i + 1) % len(playlists['data'])
-        logger.debug("next indices: %d.%d % (i,j))
+        logger.debug("next indices: %d.%d" % (i,j))
     
 
 if __name__ == "__main__":
