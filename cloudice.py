@@ -59,7 +59,7 @@ def MixCloudGen():
         scrapecast_url = re.search('href="([^"]*)"', scrapecast, re.M + re.I).groups()[0]
         yield [MX(scrapecast_url, cloudcast['name'])]
 
-        if i == 0:
+        if (i + 1) % len(playlists['data']) == 0:
             j = j + 1
         i = (i + 1) % len(playlists['data'])
         logger.debug("next indices: %d.%d" % (i,j))
