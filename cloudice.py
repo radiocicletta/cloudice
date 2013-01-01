@@ -52,12 +52,13 @@ def MixCloudGen():
             logger.debug('%s%s/cloudcasts/' % (base_url, playlists['data'][i]['key']))
             lists.append(json.load(urllib2.urlopen('%s%scloudcasts/' % (base_url, playlists['data'][i]['key']))))
         playlist = lists[i]
-        cloudcast = lists[i]['data'][j % len(lists[i]['data'])]
+        if len(lists[i]):
+            cloudcast = lists[i]['data'][j % len(lists[i]['data'])]
 
-        # since Mixcloud API doesn't give audio files urls, we use this dirty hack.
-        scrapecast = urllib2.urlopen(scraper_url, urlencode({'refext':'', 'track': cloudcast['url']})).read()
-        scrapecast_url = re.search('href="([^"]*)"', scrapecast, re.M + re.I).groups()[0]
-        yield [MX(scrapecast_url, cloudcast['name'])]
+            # since Mixcloud API doesn't give audio files urls, we use this dirty hack.
+            scrapecast = urllib2.urlopen(scraper_url, urlencode({'refext':'', 'track': cloudcast['url']})).read()
+            scrapecast_url = re.search('href="([^"]*)"', scrapecast, re.M + re.I).groups()[0]
+            yield [MX(scrapecast_url, cloudcast['name'])]
 
         if (i + 1) % len(playlists['data']) == 0:
             j = j + 1
