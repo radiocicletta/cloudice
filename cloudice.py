@@ -13,6 +13,8 @@ try:
     import simplejson as json
 except:
     import json
+from subprocess import Popen, PIPE
+from select import select
 
 logging.basicConfig(filename='./cloud.log', level=logging.DEBUG)
 logger = logging.getLogger()
@@ -52,7 +54,7 @@ def MixCloudGen():
             logger.debug('%s%s/cloudcasts/' % (base_url, playlists['data'][i]['key']))
             lists.append(json.load(urllib2.urlopen('%s%scloudcasts/' % (base_url, playlists['data'][i]['key']))))
         playlist = lists[i]
-        if len(lists[i]):
+        if len(lists[i]['data']):
             cloudcast = lists[i]['data'][j % len(lists[i]['data'])]
 
             # since Mixcloud API doesn't give audio files urls, we use this dirty hack.
@@ -78,6 +80,11 @@ if __name__ == "__main__":
     except Exception, e:
         logger.error(e)
         sys.exit(1)
+
+    if len(settings.transcoder.strip()):
+        proc = Popen(settings.transcoder.split(' '), stdout=PIPE, stdin=PIPE)
+    else:
+        proc = None
 
 
     errorcount = 0.0
@@ -117,8 +124,22 @@ if __name__ == "__main__":
             while streaming:
                 io = StringIO()
                 try:
-                    io.write(stream.read(4096))
-                except:
+                    if proc:
+                        proc.stdin.write(stream.read(4096))
+                        ready = select([proc.stdout], [], [], 1)
+                        if not len(ready[0]):
+                            continue
+                        io.write(proc.stdout.read(4096))
+                    else:
+                        io.write(stream.read())
+                except IOError:
+                    logger.debug("IOError")
+                    proc.wait()
+                    logger.debug("closing")
+                    proc = Popen(settings.transcoder.split(' '), stdout=PIPE, stdin=PIPE)
+                    logger.debug("reopened")
+                except Exception, e:
+                    logger.error(e)
                     errorcount = errorcount + 1
                     streaming = False 
                     continue
