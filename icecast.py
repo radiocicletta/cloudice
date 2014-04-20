@@ -25,7 +25,7 @@ def connect():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((stream_settings.host, stream_settings.port))
     s.sendall("SOURCE %s ICE/1.0\n%s\n%s\n\n" % (
-        stream_settings.mount_point, 
+        stream_settings.mount_point,
         request_format({
             'content-type': 'audio/mpeg',
             'Authorization': 'Basic ' + b64encode("source:" + stream_settings.password),
@@ -43,7 +43,7 @@ def connect():
                 (stream_settings.samplerate, stream_settings.bitrate, stream_settings.channels)
         })
     ))
-    
+
     response = s.recv(4096)
     if len(response) == 0:
         raise Exception("No response from icecast server")
@@ -51,8 +51,8 @@ def connect():
         raise Exception("Server response: %s" % response)
     start_time = time.time()
     packets_sent = 0
-    
-        
+
+
 # update the metadata using a new socket -- i guess there's no other useful keys besides "song"
 def update_metadata(song):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -87,9 +87,6 @@ def send(buf):
     # return immediately if we're going too slow
     if extra_packets <= stream_settings.buffer_packets:
         return
-    # sleep for however much time is remaining to meet our bitrate
-    total_packet_time = extra_packets * (4096.0 * 8) / (stream_settings.bitrate * 1000.0)
-    time.sleep((total_packet_time - packet_elapsed_time) % 1)
 
 def close():
     try:
