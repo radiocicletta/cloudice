@@ -4,7 +4,7 @@ import icecast  # see https://code.google.com/p/doogradio/ for the original code
 import sys
 import urllib2
 from urllib import urlencode
-from StringIO import StringIO
+from cStringIO import StringIO
 from time import sleep
 import unicodedata
 import logging
