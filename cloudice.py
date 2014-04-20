@@ -33,7 +33,7 @@ def SoundCloudGen():
     while True:
         yield client.get(
             "/tracks",
-            license="cc-by",
+            license="to_share",
             tags=settings.tags,
             order=settings.order,
             types="original",
