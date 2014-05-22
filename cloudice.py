@@ -129,6 +129,9 @@ if __name__ == "__main__":
                 logger.error(e)
                 logger.error("[ErrorRatio] %d %d %f" % (
                     errorcount, playcount, errorcount / playcount))
-            curl.perform()
+            try:
+                curl.perform()
+            except pycurl.error:
+                pass  # go on, don't look back!
 
     icecast.close()
