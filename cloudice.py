@@ -117,9 +117,9 @@ if __name__ == "__main__":
         icecast.connect()
 
         for track in tracks:
-            curl.setopt(pycurl.URL, "%s?client_id=%s" % (
-                track.stream_url, settings.client_id))
             try:
+                curl.setopt(pycurl.URL, "%s?client_id=%s" % (
+                    track.stream_url, settings.client_id))
                 username = track.user["username"]
                 title = track.title
                 logger.info("Now playing: %s - %s" % (username, title))
