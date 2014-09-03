@@ -28,11 +28,12 @@ def SoundCloudGen():
     while True:
         yield client.get(
             "/tracks",
-            license="to_share",
+            license="cc-by",
+            filter="steamable",
             tags=settings.tags,
-            order=settings.order,
             types="original",
             limit=limit,
+            duration={'from': 90000},
             offset=offset)
         offset = offset + limit
 
