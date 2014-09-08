@@ -29,11 +29,12 @@ def SoundCloudGen():
     while True:
         yield client.get(
             "/tracks",
-            license="to_share",
+            license="cc-by",
+            filter="steamable",
             tags=settings.tags,
-            order=settings.order,
             types="original",
             limit=limit,
+            duration={'from': 90000},
             offset=offset)
         offset = offset + limit
 
@@ -142,9 +143,9 @@ if __name__ == "__main__":
         icecast.open()
 
         for track in tracks:
-            curl.setopt(pycurl.URL, "%s?client_id=%s" % (
-                track.stream_url, settings.client_id))
             try:
+                curl.setopt(pycurl.URL, "%s?client_id=%s" % (
+                    track.stream_url, settings.client_id))
                 username = track.user["username"]
                 title = track.title
                 logger.info("Now playing: %s - %s" % (username, title))
@@ -154,6 +155,9 @@ if __name__ == "__main__":
                 logger.error(e)
                 logger.error("[ErrorRatio] %d %d %f" % (
                     errorcount, playcount, errorcount / playcount))
-            curl.perform()
+            try:
+                curl.perform()
+            except pycurl.error:
+                pass  # go on, don't look back!
 
     icecast.close()
