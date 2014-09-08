@@ -1,2 +1,3 @@
 soundcloud
 pycurl
+python-shout

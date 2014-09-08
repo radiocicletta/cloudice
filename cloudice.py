@@ -1,6 +1,7 @@
 import soundcloud
 import settings
-import icecast  # see https://code.google.com/p/doogradio/ for the original code
+import stream_settings as ss
+import shout
 import sys
 import pycurl
 from urllib import urlencode
@@ -39,9 +40,30 @@ def SoundCloudGen():
 
 proc = None
 
+def create_shout():
+    _shout = shout()
+    _shout.port = ss.port
+    _shout.host = ss.host
+    _shout.password = ss.password
+    _shout.mount = ss.mount_point
+    _shout.protocol = "icy"
+    _shout.format = "mp3"
+
+    _shout.name = ss.name
+    _shout.genre = ss.genre
+    _shout.description = ss.description
+    _shout.agent = ss.user_agent
+    _shout.audio_info = {
+        'samplerate': ss.samplerate,
+        'bitrate': ss.bitrate,
+        'channels': ss.channels
+    }
+
+    return _shout
+
 
 def cbk_write(buf):
-    global proc
+    global proc, icecast
     data = StringIO(buf)
     data_l = len(buf)
     while data_l > data.tell():
@@ -74,7 +96,8 @@ def cbk_write(buf):
             logger.error(e)
             icecast.close()
             sleep(1)
-            icecast.connect()
+            icecast = create_shout()
+            icecast.open()
             logger.error("Failed connection with icecast server")
 
 
@@ -114,7 +137,9 @@ if __name__ == "__main__":
 
         playcount = playcount + 1
 
-        icecast.connect()
+        global icecast
+        icecast = create_shout()
+        icecast.open()
 
         for track in tracks:
             curl.setopt(pycurl.URL, "%s?client_id=%s" % (
