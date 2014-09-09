@@ -55,9 +55,9 @@ def create_shout():
     _shout.description = ss.description
     _shout.agent = ss.user_agent
     _shout.audio_info = {
-        'samplerate': ss.samplerate,
-        'bitrate': ss.bitrate,
-        'channels': ss.channels
+        shout.SHOUT_AI_SAMPLERATE: str(ss.samplerate),
+        shout.SHOUT_AI_BITRATE: str(ss.bitrate),
+        shout.SHOUT_AI_CHANNELS: str(ss.channels)
     }
 
     return _shout
