@@ -150,8 +150,10 @@ if __name__ == "__main__":
                 username = track.user["username"]
                 title = track.title
                 logger.info("Now playing: %s - %s" % (username, title))
-                icecast.update_metadata(unicodedata.normalize(
-                    "NFKD", title).encode('ascii', 'ignore'))
+                icecast.set_metadata({
+                    'song': unicodedata.normalize(
+                        "NFKD", title).encode('ascii', 'ignore')
+                })
             except Exception as e:
                 logger.error(e)
                 logger.error("[ErrorRatio] %d %d %f" % (
