@@ -42,7 +42,7 @@ def SoundCloudGen():
 proc = None
 
 def create_shout():
-    _shout = shout()
+    _shout = shout.Shout()
     _shout.port = ss.port
     _shout.host = ss.host
     _shout.password = ss.password
