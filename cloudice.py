@@ -45,7 +45,7 @@ def create_shout():
     _shout = shout.Shout()
     _shout.port = ss.port
     _shout.host = ss.host
-    _shout.user = 'source'
+    _shout.user = ss.user
     _shout.password = ss.password
     _shout.mount = ss.mount_point
     _shout.protocol = "icy"
