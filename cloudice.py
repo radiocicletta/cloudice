@@ -48,7 +48,7 @@ def create_shout():
     _shout.user = ss.user
     _shout.password = ss.password
     _shout.mount = ss.mount_point
-    _shout.protocol = "icy"
+    _shout.protocol = "http"
     _shout.format = "mp3"
 
     _shout.name = ss.name
